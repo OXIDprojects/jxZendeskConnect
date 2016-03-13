@@ -29,8 +29,8 @@
     <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:45%; overflow-y:scroll;">
             <table cellspacing="0" cellpadding="0" border="0" width="99%">
                 <tr>
-                    <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_STATUSICON" }]</td>
-                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_KEY" }]</td>
+                    <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_TICKETMODE" }]</td>
+                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_TICKETTYPE" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_PRIORITY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_STATUS" }]</td>
@@ -41,20 +41,27 @@
                 [{foreach item=aIssue from=$aIssues}]
                     [{ cycle values="listitem,listitem2" assign="listclass" }]
                     <tr>
-                        <td class="[{ $listclass }]" style="height: 20px;">[{if $sUserID == $aIssue.requester_id}][{ oxmultilang ident="JXZENDESK_TICKETMODE_CUSTOMER" }][{else}]<span style="color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]</span>[{/if}]</td>
-                        <td class="[{ $listclass }]"><a href="[{$sIssueUrl}][{$aIssue.key}]" target="_blank">[{$aIssue.via.channel}]</a></td>
-                        <td class="[{ $listclass }]" title="[{$aIssue.fields.description}]"><a href="[{$sIssueUrl}][{$aIssue.key}]" title="[{$aIssue.fields.description}]" target="_blank">[{$aIssue.subject}]</a></td>
+                        <td class="[{ $listclass }]" style="height: 20px;">
+                            [{if $sUserID == $aIssue.requester_id}]
+                                <div class="zendesk-icon" style="background-color:darkgray;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_CUSTOMER" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_CUSTOMER" }]
+                            [{else}]
+                                <div class="zendesk-icon" style="background-color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_INTERNAL" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]
+                            [{/if}]
+                        </td>
+                        <td class="[{ $listclass }]">[{if $aIssue.type != ""}][{ oxmultilang ident="JXZENDESK_TICKETTYPE_"|cat:$aIssue.type|upper }][{/if}]</td>
+                        <td class="[{ $listclass }]" title="[{$aIssue.description}]"><a href="[{$sServerUrl}]/agent/tickets/[{$aIssue.id}]" title="[{$aIssue.description}]" target="_blank">[{$aIssue.subject}]</a></td>
                         <td class="[{ $listclass }]">[{if $aIssue.priority != ""}][{ oxmultilang ident="JXZENDESK_PRIORITY_"|cat:$aIssue.priority|upper }][{/if}]</td>
-                        <td class="[{ $listclass }]"><span class="jira-status-[{$aIssue.fields.status.statusCategory.colorName}]">&nbsp;[{ oxmultilang ident="JXZENDESK_STATUS_"|cat:$aIssue.status|upper }]&nbsp;</span></td>
+                        <td class="[{ $listclass }]">[{if $aIssue.status == "open"}]<div class="zendesk-icon" style="background-color:crimson;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_OPEN" }]</div>[{elseif $aIssue.status == "pending"}]<div class="zendesk-icon" style="background-color:cornflowerblue;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_PENDING" }]</div>[{/if}] [{ oxmultilang ident="JXZENDESK_STATUS_"|cat:$aIssue.status|upper }]</td>
                         <td class="[{ $listclass }]">[{$aIssue.created_at|substr:0:10}]</td>
-                        <td class="[{ $listclass }]">[{$aIssue.submitter_id}]</td>
+                        <td class="[{ $listclass }]">[{$aIssue.requester_name}]</td>
                         <td class="[{ $listclass }]">[{$aIssue.due_at|substr:0:10}]</td>
                     </tr>
                 [{/foreach}]
             </table>
     </div>
             
-    <div style="height:20px;">&nbsp;</div>
+    [{*<div style="height:20px;">&nbsp;</div>*}]
+    <hr>
     
     <div>
         <form name="jxzendeskconnect_createissue" id="jxzendeskconnect_details" action="[{ $oViewConf->getSelfLink() }]" method="post">
@@ -64,9 +71,9 @@
             <input type="hidden" name="fnc" value="jxZendeskConnectCreateIssue">
             <table>
                 <tr>
-                    <td valign="top">[{ oxmultilang ident="JXZENDESK_TICKETMODE_TITLE" }]</td>
+                    <td valign="top">[{ oxmultilang ident="JXZENDESK_TICKETMODE" }]</td>
                     <td>
-                        <input type="radio" name="jxzendesk_ticketmode" id="mode-internal" value="internal"><label for="mode-internal"> <span style="color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]</span></label>
+                        <input type="radio" name="jxzendesk_ticketmode" id="mode-internal" value="internal" checked="checked"><label for="mode-internal"> <span style="color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]</span></label>
                         &nbsp;&nbsp;&nbsp;
                         <input type="radio" name="jxzendesk_ticketmode" id="mode-customer" value="customer"><label for="mode-customer"> [{ oxmultilang ident="JXZENDESK_TICKETMODE_CUSTOMER" }]</label>
                     </td>
@@ -75,15 +82,15 @@
                     <td>[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td><td>
                         <input type="text" name="jxzendesk_summary" size="50" />
                         <select name="jxzendesk_issuetype" width="20">
-                            <option value="question">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_QUESTION" }]</option>
+                            <option value="question" selected="selected">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_QUESTION" }]</option>
                             <option value="incident">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_INCIDENT" }]</option>
                             <option value="problem">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_PROBLEM" }]</option>
                             <option value="task">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_TASK" }]</option>
                         </select>
                         <select name="jxzendesk_priority" width="20">
                             <option value="low">[{ oxmultilang ident="JXZENDESK_PRIORITY_LOW" }]</option>
-                            <option value="normal">[{ oxmultilang ident="JXZENDESK_PRIORITY_NORMAL" }]</option>
-                            <option value="high" selected>[{ oxmultilang ident="JXZENDESK_PRIORITY_HIGH" }]</option>
+                            <option value="normal" selected="selected">[{ oxmultilang ident="JXZENDESK_PRIORITY_NORMAL" }]</option>
+                            <option value="high">[{ oxmultilang ident="JXZENDESK_PRIORITY_HIGH" }]</option>
                             <option value="urgent">[{ oxmultilang ident="JXZENDESK_PRIORITY_URGENT" }]</option>
                         </select>
                     </td>

@@ -23,10 +23,13 @@ $aLang = array(
         'JXZENDESK_DUEDATE'                        => 'F&auml;llig am',
         'JXZENDESK_DESCRIPTION'                    => 'Beschreibung',
     
-        'JXZENDESK_TICKETMODE_TITLE'                => 'Modus',
+        'JXZENDESK_TICKETMODE'                      => 'Modus',
         'JXZENDESK_TICKETMODE_INTERNAL'             => 'Intern',
         'JXZENDESK_TICKETMODE_CUSTOMER'             => 'Kunde',
+        'JXZENDESK_TICKETMODE_SHORT_INTERNAL'       => 'i',
+        'JXZENDESK_TICKETMODE_SHORT_CUSTOMER'       => 'k',
     
+        'JXZENDESK_TICKETTYPE'                      => 'Typ',
         'JXZENDESK_TICKETTYPE_QUESTION'             => 'Frage',
         'JXZENDESK_TICKETTYPE_INCIDENT'             => 'Vorfall',
         'JXZENDESK_TICKETTYPE_PROBLEM'              => 'Problem',
@@ -43,6 +46,8 @@ $aLang = array(
         'JXZENDESK_STATUS_HOLD'                     => 'Angehalten',
         'JXZENDESK_STATUS_SOLVED'                   => 'Gel&ouml;st',
         'JXZENDESK_STATUS_CLOSED'                   => 'Geschlossen',
+        'JXZENDESK_STATUS_SHORT_OPEN'               => 'o',
+        'JXZENDESK_STATUS_SHORT_PENDING'            => 'w',
     
         'SHOP_MODULE_GROUP_JXZENDESKCONNECT_SERVER' => 'Zendesk Server',
         'SHOP_MODULE_sJxZendeskConnectServerUrl'   => 'Server URL',
