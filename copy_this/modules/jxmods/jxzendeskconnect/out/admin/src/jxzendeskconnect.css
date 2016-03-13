@@ -1,0 +1,50 @@
+/* 
+    Created on : 02.03.2016, 21:17:59
+    Author     : Joachim Barthel
+*/
+
+#liste tr:hover td{
+    background-color: #e0e0e0;
+}
+
+#liste td.activetime {
+    background-image: url(bg/ico_activetime.png);
+    min-width: 17px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.listitem, .listitem2 {
+    padding-left: 4px;
+    padding-right: 16px;
+    white-space: nowrap;
+}
+.jira-status-medium-gray {
+    color: dimgray;
+    border: 1px solid gray;
+    border-radius: 3px;
+}
+.jira-status-yellow {
+    color: darkgoldenrod;
+    border: 1px solid goldenrod;
+    border-radius: 3px;
+}
+.jira-status-green {
+    color: green;
+    border: 1px solid green;
+    border-radius: 3px;
+}
+.jira-status-brown {
+    color: saddlebrown;
+    border: 1px solid brown;
+    border-radius: 3px;
+}
+.jira-status-warm-red {
+    color: firebrick;
+    border: 1px solid crimson;
+    border-radius: 3px;
+}
+.jira-status-blue-gray {
+    color: royalblue;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
