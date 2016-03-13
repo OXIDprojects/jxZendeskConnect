@@ -31,9 +31,8 @@
     <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:95%; overflow-y:scroll;">
             <table cellspacing="0" cellpadding="0" border="0" width="99%">
                 <tr>
-                    <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_STATUSICON" }]</td>
-                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_KEY" }]</td>
-                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td>
+                    <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_TICKETMODE" }]</td>
+                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_TICKETTYPE" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_PRIORITY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_STATUS" }]</td>
@@ -44,15 +43,28 @@
                 [{foreach item=aIssue from=$aIssues}]
                     [{ cycle values="listitem,listitem2" assign="listclass" }]
                     <tr>
-                        <td class="[{ $listclass }]" style="height: 20px;">&nbsp;<img src="[{$aIssue.fields.issuetype.iconUrl}]" /></td>
-                        <td class="[{ $listclass }]"><a href="[{$sIssueUrl}][{$aIssue.key}]" target="_blank">[{$aIssue.key}]</a></td>
-                        <td class="[{ $listclass }]" title="[{$aIssue.fields.description}]"><a href="[{$sIssueUrl}][{$aIssue.key}]" title="[{$aIssue.fields.description}]" target="_blank">[{$aIssue.fields.summary}]</a></td>
-                        <td class="[{ $listclass }]">[{$aIssue.fields.customfield_10206 }]</td>
-                        <td class="[{ $listclass }]"><img src="[{$imgIconUrl}]/priority[{$aIssue.fields.priority.id}].png" /> [{ oxmultilang ident="JXZENDESK_PRIORITY_"|cat:$aIssue.fields.priority.id }]</td>
-                        <td class="[{ $listclass }]"><span class="jira-status-[{$aIssue.fields.status.statusCategory.colorName}]">&nbsp;[{$aIssue.fields.status.name}]&nbsp;</span></td>
-                        <td class="[{ $listclass }]">[{$aIssue.fields.created|substr:0:10}]</td>
-                        <td class="[{ $listclass }]">[{$aIssue.fields.creator.displayName}]</td>
-                        <td class="[{ $listclass }]">[{$aIssue.fields.duedate}]</td>
+                        <td class="[{ $listclass }]" style="height: 20px;">
+                            [{if $sUserID == $aIssue.requester_id}]
+                                <div class="zendesk-icon" style="background-color:darkgray;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_CUSTOMER" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_CUSTOMER" }]
+                            [{else}]
+                                <div class="zendesk-icon" style="background-color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_INTERNAL" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]
+                            [{/if}]
+                        </td>
+                        <td class="[{ $listclass }]">[{if $aIssue.type != ""}][{ oxmultilang ident="JXZENDESK_TICKETTYPE_"|cat:$aIssue.type|upper }][{/if}]</td>
+                        <td class="[{ $listclass }]" title="[{$aIssue.description}]"><a href="[{$sServerUrl}]/agent/tickets/[{$aIssue.id}]" title="[{$aIssue.description}]" target="_blank">[{$aIssue.subject}]</a></td>
+                        <td class="[{ $listclass }]">[{if $aIssue.priority != ""}][{ oxmultilang ident="JXZENDESK_PRIORITY_"|cat:$aIssue.priority|upper }][{/if}]</td>
+                        <td class="[{ $listclass }]">
+                            [{if $aIssue.status == "open"}]
+                                <div class="zendesk-icon" style="background-color:crimson;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_OPEN" }]</div>
+                            [{elseif $aIssue.status == "pending"}]
+                                <div class="zendesk-icon" style="background-color:cornflowerblue;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_PENDING" }]</div>
+                            [{elseif $aIssue.status == "solved"}]
+                                <div class="zendesk-icon" style="background-color:darkgray;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_SOLVED" }]</div>
+                            [{/if}] [{ oxmultilang ident="JXZENDESK_STATUS_"|cat:$aIssue.status|upper }]
+                        </td>
+                        <td class="[{ $listclass }]">[{$aIssue.created_at|substr:0:10}]</td>
+                        <td class="[{ $listclass }]">[{$aIssue.requester_name}]</td>
+                        <td class="[{ $listclass }]">[{$aIssue.due_at|substr:0:10}]</td>
                     </tr>
                 [{/foreach}]
             </table>

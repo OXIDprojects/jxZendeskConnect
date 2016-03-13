@@ -53,7 +53,152 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
     }
     
     
+    
+    /*
+     * 
+     */
     private function _jxZendeskSearchIssues() 
+    {
+        $myConfig = oxRegistry::getConfig();
+        $sServerUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl');
+
+        $soxId = $this->getEditObjectId();
+        if ($soxId != "-1" && isset($soxId)) {
+            // load object
+            $oOrder = oxNew("oxorder");
+            if ($oOrder->load($soxId)) {
+                $oUser = $oOrder->getOrderUser();
+                $sUserMail = $oUser->oxuser__oxusername->value;
+                //$sCustomerEMail = $oOrder->oxorder__oxbillemail->value;
+            } else {
+                $oUser = oxNew("oxuser");
+                if ($oUser->load($soxId)) {
+                    $sUserMail = $oUser->oxuser__oxusername->value;
+                }
+            }
+        }
+        
+        $sQueryParam = urlencode( 'type:ticket status<solved "' . $sUserMail . '"' );
+        //--echo '<pre>'.$sUrl.'</pre>';
+
+        //$aResult = $this->_curlWrap('/search.json?query='.urlencode('type:ticket status<solved "jobarthel@gmail.com"'), null, 'GET');
+        //echo '/search.json?query='.$sQueryParam;
+        $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
+        
+        /*echo '<pre>';
+        print_r($aResult);
+        echo '</pre>';/**/
+        $iIssueCount = $aResult['count'];
+        /*echo '<pre>';
+        print_r($aIssues);
+        echo '</pre>';/**/
+        
+        $aTickets = $this->_jxZendeskAddUserDetails( $aResult['results'] );
+        
+        $aUser = $this->_jxZendeskSearchUser();
+        
+        $this->_aViewData["sServerUrl"] = $myConfig->getConfigParam('sJxZendeskConnectServerUrl');
+        $this->_aViewData["sUserID"] = $aUser['id'];
+        $this->_aViewData["iIssueCount"] = $iIssueCount;
+        $this->_aViewData["aIssues"] = $aTickets;
+
+    }
+    
+    
+    /*
+     * 
+     */
+    private function _jxZendeskSearchUser() 
+    {
+        $myConfig = oxRegistry::getConfig();
+        
+        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/search';
+        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
+        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
+
+        $soxId = $this->getEditObjectId();
+        if ($soxId != "-1" && isset($soxId)) {
+            // load object
+            $oOrder = oxNew("oxorder");
+            if ($oOrder->load($soxId)) {
+                $oUser = $oOrder->getOrderUser();
+                $sUserMail = $oUser->oxuser__oxusername->value;
+                //$sCustomerEMail = $oOrder->oxorder__oxbillemail->value;
+            } else {
+                $oUser = oxNew("oxuser");
+                if ($oUser->load($soxId)) {
+                    $sUserMail = $oUser->oxuser__oxusername->value;
+                }
+            }
+        }
+        
+        $sQueryParam = urlencode( 'type:user "' . $sUserMail . '"' );
+
+        $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
+        
+        /*echo '<pre>';
+        print_r($aResult);
+        echo '</pre>';/**/
+        
+        $iIssueCount = $aResult['count'];
+        
+        if ($aResult['count'] == 1) {
+            return $aResult['results']['0'];
+        } else {
+            return null;
+        }
+
+    }
+    
+    
+    /*
+     * 
+     */
+    private function _jxZendeskAddUserDetails( $aTickets ) 
+    {
+        $myConfig = oxRegistry::getConfig();
+        
+        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/search';
+        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
+        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
+
+        /*echo '<pre>';
+        print_r($aTickets);
+        echo '</pre><hr>';/**/
+        $aUserIds = array();
+        foreach ($aTickets as $key => $aTicket) {
+            //echo $aTicket['requester_id'].'<br>';
+            if (!in_array($aTicket['requester_id'], $aUserIds)) {
+                $aUserIds[] = $aTicket['requester_id']; 
+            }
+        }
+        
+        $sQueryParam = implode( ',', $aUserIds );
+        //echo '<hr>/users/show_many.json?ids='.$sQueryParam.'<br>';
+
+        $aResult = $this->_curlWrap( '/users/show_many.json?ids='.$sQueryParam, null, 'GET' );
+        
+        //$aResult = $this->_addUserDetails( $aResult );
+        $aUsers = $aResult['users'];
+        
+        foreach ($aTickets as $key => $aTicket) {
+            foreach ($aUsers as $aUser) {
+                if ($aTicket['requester_id'] == $aUser['id']) {
+                    $aTickets[$key]['requester_name'] = $aUser[name];
+                    $aTickets[$key]['requester_email'] = $aUser[email];
+                }
+            }
+        }
+        
+        /*echo '<pre>';
+        print_r($aTickets);
+        echo '</pre>';/**/
+        
+        return $aTickets;
+    }
+    
+    
+    private function _jxZendeskSearchIssues2() 
     {
         $myConfig = oxRegistry::getConfig();
         
@@ -113,5 +258,58 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         curl_close($ch);
         
     }
+    
+    
+    private function _curlWrap($url, $json, $action)
+    {
+        $myConfig = oxRegistry::getConfig();
+        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/api/v2';
+        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
+        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
+        $sToken = $myConfig->getConfigParam('sJxZendeskConnectToken');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
+        curl_setopt($ch, CURLOPT_URL, $sUrl.$url);
+        //--echo  $sUrl.$url;
+        curl_setopt($ch, CURLOPT_USERPWD, $sUsername."/token:".$sToken);
+        switch($action){
+            case "POST":
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+                break;
+            case "GET":
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+                break;
+            case "PUT":
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+                break;
+            case "DELETE":
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+                break;
+            default:
+                break;
+        }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+        curl_setopt($ch, CURLOPT_USERAGENT, "MozillaXYZ/1.0");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        /*print_r($ch);*/
+        $output = curl_exec($ch);
+        if ($ch_error) {
+            echo "cURL Error: $ch_error";
+        }
+        /*var_dump($output);*/
+        curl_close($ch);
+        $decoded = json_decode($output, true);
+        /*echo '<pre>';
+        print_r($decoded);
+        echo '</pre>';*/
+        return $decoded;
+    }    
     
 }

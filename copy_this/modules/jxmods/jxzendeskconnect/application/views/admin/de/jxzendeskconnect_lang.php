@@ -8,7 +8,7 @@ $aLang = array(
 	'tbcluser_jxzendeskconnect'                => 'Zendesk',
 	'tbclorder_jxzendeskconnect'               => 'Zendesk',
     
-	'jxzendeskconnect_menu'                    => 'JIRA Vorg&auml;nge',
+	'jxzendeskconnect_menu'                    => 'Zendesk Tickets',
     
         'JXZENDESK_OPENISSUE'                      => 'Vorgang offen',
         'JXZENDESK_OPENISSUES'                     => 'Vorg&auml;nge offen',
@@ -48,6 +48,7 @@ $aLang = array(
         'JXZENDESK_STATUS_CLOSED'                   => 'Geschlossen',
         'JXZENDESK_STATUS_SHORT_OPEN'               => 'o',
         'JXZENDESK_STATUS_SHORT_PENDING'            => 'w',
+        'JXZENDESK_STATUS_SHORT_SOLVED'             => 'g',
     
         'SHOP_MODULE_GROUP_JXZENDESKCONNECT_SERVER' => 'Zendesk Server',
         'SHOP_MODULE_sJxZendeskConnectServerUrl'   => 'Server URL',

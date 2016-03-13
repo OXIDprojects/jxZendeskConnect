@@ -225,7 +225,7 @@ class jxzendeskconnect_details extends oxAdminDetails {
         $sTicketMode = $this->getConfig()->getRequestParameter( 'jxzendesk_ticketmode' );
         $sTicketSubject = $this->getConfig()->getRequestParameter( 'jxzendesk_summary' );
         $sTicketDescription = $this->getConfig()->getRequestParameter( 'jxzendesk_description' );
-        $sIssueType = $this->getConfig()->getRequestParameter( 'jxzendesk_issuetype' );
+        $sTicketType = $this->getConfig()->getRequestParameter( 'jxzendesk_issuetype' );
         $sPriority = $this->getConfig()->getRequestParameter( 'jxzendesk_priority' );
         $sDueDate = $this->getConfig()->getRequestParameter( 'jxzendesk_duedate' );
 
@@ -248,66 +248,6 @@ class jxzendeskconnect_details extends oxAdminDetails {
             }
         }
         
-/*        $aData = array(
-                    'fields' => array(
-                        'project' => array(
-                            'key' => $sProject,
-                            ),
-                        'summary' => $sIssueSummary,
-                        'description' => $sIssueDescription,
-                        $sFieldCustomerNumber => $sCustomerNumber,
-                        $sFieldCustomerEMail => $sCustomerEMail,
-                        'issuetype' => array(
-                            /*"self" => "xxxx",
-                            "id" => "xxxx",
-                            "description" => "xxxxx",
-                            "iconUrl" => "xxxxx",*/
-                            /*'name' => $sIssueType,
-                            'subtask' => false
-                            ),
-                        'assignee' => array(
-                            'name' => $sAssignee
-                            ),
-                        'priority' => array(name => $sPriority)
-                        ),
-            );        
-        if (!empty($sDueDate)) {
-            $aData['fields']['duedate'] = $sDueDate;
-        }*/
-
-	/*echo '<pre>';
-	print_r(json_encode(json_decode(json_encode($aData)),JSON_PRETTY_PRINT));
-	echo '</pre>';*/
-        
-        /*$ch = curl_init();
-  
-        $aHeaders = array(
-            'Accept: application/json',
-            'Content-Type: application/json'
-            );        
-
-        $test = "This is the content of the custom field.";
-  
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeaders);
-        //curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($aData));
-        curl_setopt($ch, CURLOPT_URL, $sUrl);
-        curl_setopt($ch, CURLOPT_USERPWD, "$sUsername:$sPassword");
-
-        $result = curl_exec($ch);
-        $ch_error = curl_error($ch);
-
-        if ($ch_error) {
-            echo "cURL Error: $ch_error";
-        } else {
-            //echo $result;
-        }
-
-        curl_close($ch);*/
 
         if ($sTicketMode == 'internal') {
             $aPostData = array(
@@ -318,10 +258,12 @@ class jxzendeskconnect_details extends oxAdminDetails {
                                                             ),
                                             'subject' => $sTicketSubject,
                                             'description' => $sTicketDescription,
-                                            "custom_fields" => array(
-                                                                "id" => 25857169, 
-                                                                "value" => $sUserName . ' (' . $sUserMail . ')'
-                                                                )
+                                            'custom_fields' => array(
+                                                                'id' => 25857169, 
+                                                                'value' => $sUserName . ' (' . $sUserMail . ')'
+                                                                ),
+                                            'type' => $sTicketType,
+                                            'due_at' => $sDueDate
                                             )
                             );
 
@@ -333,7 +275,9 @@ class jxzendeskconnect_details extends oxAdminDetails {
                                                             'email' => $sUserMail
                                                             ),
                                             'subject' => $sTicketSubject,
-                                            'description' => $sTicketDescription
+                                            'description' => $sTicketDescription,
+                                            'type' => $sTicketType,
+                                            'due_at' => $sDueDate
                                             )
                             );
         }

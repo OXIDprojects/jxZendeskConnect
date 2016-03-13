@@ -51,7 +51,15 @@
                         <td class="[{ $listclass }]">[{if $aIssue.type != ""}][{ oxmultilang ident="JXZENDESK_TICKETTYPE_"|cat:$aIssue.type|upper }][{/if}]</td>
                         <td class="[{ $listclass }]" title="[{$aIssue.description}]"><a href="[{$sServerUrl}]/agent/tickets/[{$aIssue.id}]" title="[{$aIssue.description}]" target="_blank">[{$aIssue.subject}]</a></td>
                         <td class="[{ $listclass }]">[{if $aIssue.priority != ""}][{ oxmultilang ident="JXZENDESK_PRIORITY_"|cat:$aIssue.priority|upper }][{/if}]</td>
-                        <td class="[{ $listclass }]">[{if $aIssue.status == "open"}]<div class="zendesk-icon" style="background-color:crimson;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_OPEN" }]</div>[{elseif $aIssue.status == "pending"}]<div class="zendesk-icon" style="background-color:cornflowerblue;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_PENDING" }]</div>[{/if}] [{ oxmultilang ident="JXZENDESK_STATUS_"|cat:$aIssue.status|upper }]</td>
+                        <td class="[{ $listclass }]">
+                            [{if $aIssue.status == "open"}]
+                                <div class="zendesk-icon" style="background-color:crimson;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_OPEN" }]</div>
+                            [{elseif $aIssue.status == "pending"}]
+                                <div class="zendesk-icon" style="background-color:cornflowerblue;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_PENDING" }]</div>
+                            [{elseif $aIssue.status == "solved"}]
+                                <div class="zendesk-icon" style="background-color:darkgray;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_SOLVED" }]</div>
+                            [{/if}] [{ oxmultilang ident="JXZENDESK_STATUS_"|cat:$aIssue.status|upper }]
+                        </td>
                         <td class="[{ $listclass }]">[{$aIssue.created_at|substr:0:10}]</td>
                         <td class="[{ $listclass }]">[{$aIssue.requester_name}]</td>
                         <td class="[{ $listclass }]">[{$aIssue.due_at|substr:0:10}]</td>
