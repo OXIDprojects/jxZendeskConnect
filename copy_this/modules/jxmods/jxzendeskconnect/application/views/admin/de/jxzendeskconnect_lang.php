@@ -52,7 +52,6 @@ $aLang = array(
     
         'SHOP_MODULE_GROUP_JXZENDESKCONNECT_SERVER' => 'Zendesk Server',
         'SHOP_MODULE_sJxZendeskConnectServerUrl'   => 'Server URL',
-        'SHOP_MODULE_sJxZendeskConnectProject'     => 'JIRA Projekt Schl&uuml;ssel',
         'SHOP_MODULE_GROUP_JXZENDESKCONNECT_LOGIN'  => 'Zendesk Anmeldung',
         'SHOP_MODULE_sJxZendeskConnectUser'         => 'Benutzer',
         'SHOP_MODULE_sJxZendeskConnectPassword'     => 'Passwort',
@@ -60,8 +59,9 @@ $aLang = array(
         'SHOP_MODULE_GROUP_JXZENDESKCONNECT_DEFAULTS' => 'Standard Werte',
         'SHOP_MODULE_sJxZendeskConnectProject'     => 'Projekt Schl&uuml;ssel',
         'SHOP_MODULE_sJxZendeskConnectAssignee'    => 'Bearbeiter',
-        'SHOP_MODULE_GROUP_JXZENDESKCONNECT_FIELDS' => 'Benutzerdefinierte Jira-Felder',
+        'SHOP_MODULE_GROUP_JXZENDESKCONNECT_FIELDS' => 'Benutzerdefinierte Zendesk-Felder',
         'SHOP_MODULE_sJxZendeskConnectCustomerNumber' => 'Feld ID f&uuml;r Kundennummer',
+        'SHOP_MODULE_sJxZendeskConnectOrderNumber' => 'Feld ID f&uuml;r Bestellnummer',
         'SHOP_MODULE_sJxZendeskConnectCustomerEMail' => 'Feld ID f&uuml;r Kunden E-Mail',
     
 );

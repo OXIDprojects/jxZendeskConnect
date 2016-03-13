@@ -214,13 +214,15 @@ class jxzendeskconnect_details extends oxAdminDetails {
     {
         $myConfig = oxRegistry::getConfig();
         
-        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/issue/';
+        /*$sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/issue/';
         //--$sProject = $myConfig->getConfigParam('sJxZendeskConnectProject');
         $sAssignee = $myConfig->getConfigParam('sJxZendeskConnectAssignee');
         $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
         $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
         $sFieldCustomerNumber = 'customfield_' . $myConfig->getConfigParam('sJxZendeskConnectCustomerNumber');
-        $sFieldCustomerEMail = 'customfield_' . $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail');
+        $sFieldCustomerEMail = 'customfield_' . $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail');*/
+        $sCustomFieldEMail = $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail');
+        $sCustomFieldOrderNo = $myConfig->getConfigParam('sJxZendeskConnectOrderNumber');
 
         $sTicketMode = $this->getConfig()->getRequestParameter( 'jxzendesk_ticketmode' );
         $sTicketSubject = $this->getConfig()->getRequestParameter( 'jxzendesk_summary' );
@@ -238,18 +240,21 @@ class jxzendeskconnect_details extends oxAdminDetails {
                 $sCustomerNumber = $oUser->oxuser__oxcustnr->value;
                 $sUserName = $oUser->oxuser__oxfname->value . ' ' . $oUser->oxuser__oxlname->value;
                 $sUserMail = $oUser->oxuser__oxusername->value;
+                $sOrderNo = $oOrder->oxorder__oxordernr->value;
+                
             } else {
                 $oUser = oxNew("oxuser");
                 if ($oUser->load($soxId)) {
                     $sCustomerNumber = $oUser->oxuser__oxcustnr->value;
                     $sUserName = $oUser->oxuser__oxfname->value . ' ' . $oUser->oxuser__oxlname->value;
                     $sUserMail = $oUser->oxuser__oxusername->value;
+                    $sOrderNo = 0;
                 }
             }
         }
         
 
-        if ($sTicketMode == 'internal') {
+        if (($sTicketMode == 'internal') and ($sOrderNo > 0)) {
             $aPostData = array(
                             'ticket' => array(
                                             'requester' => array(
@@ -259,15 +264,62 @@ class jxzendeskconnect_details extends oxAdminDetails {
                                             'subject' => $sTicketSubject,
                                             'description' => $sTicketDescription,
                                             'custom_fields' => array(
-                                                                'id' => 25857169, 
-                                                                'value' => $sUserName . ' (' . $sUserMail . ')'
+                                                                    array(
+                                                                        'id' => $sCustomFieldEMail, 
+                                                                        'value' => $sUserName . ' (' . $sUserMail . ')'
+                                                                        ),
+                                                                    array(
+                                                                        'id' => $sCustomFieldOrderNo,
+                                                                        'value' => $sOrderNo
+                                                                        )
+                                                                    ),
+                                            'type' => $sTicketType,
+                                            'due_at' => $sDueDate
+                                            )
+                            );
+            }
+        elseif (($sTicketMode == 'internal') and ($sOrderNo <= 0)) {
+            $aPostData = array(
+                            'ticket' => array(
+                                            'requester' => array(
+                                                            'name' => 'Kathrin Barthel',
+                                                            'email' => 'support-admin@jaspona.de'
+                                                            ),
+                                            'subject' => $sTicketSubject,
+                                            'description' => $sTicketDescription,
+                                            'custom_fields' => array(
+                                                                    array(
+                                                                        'id' => $sCustomFieldEMail, 
+                                                                        'value' => $sUserName . ' (' . $sUserMail . ')'
+                                                                        )
                                                                 ),
                                             'type' => $sTicketType,
                                             'due_at' => $sDueDate
                                             )
                             );
 
-        } else {
+            } 
+        elseif (($sTicketMode == 'customer') and ($sOrderNo > 0)) {
+            $aPostData = array(
+                            'ticket' => array(
+                                            'requester' => array(
+                                                            'name' => $sUserName,
+                                                            'email' => $sUserMail
+                                                            ),
+                                            'subject' => $sTicketSubject,
+                                            'description' => $sTicketDescription,
+                                            'custom_fields' => array(
+                                                                    array(
+                                                                        'id' => $sCustomFieldOrderNo, 
+                                                                        'value' => $sOrderNo
+                                                                        )
+                                                                ),
+                                            'type' => $sTicketType,
+                                            'due_at' => $sDueDate
+                                            )
+                            );
+        }
+        else {
             $aPostData = array(
                             'ticket' => array(
                                             'requester' => array(
@@ -283,9 +335,11 @@ class jxzendeskconnect_details extends oxAdminDetails {
         }
         
         
-        $sPostData = json_encode( $aPostData, JSON_FORCE_OBJECT );
+        $sPostData = json_encode( $aPostData );
         //-------$sQueryParam = urlencode( 'type:ticket status<solved "' . $sUserMail . '"' );
-        //--echo '<pre>'.$sUrl.'</pre>';
+        /*echo '<pre>';
+        echo ($sPostData);
+        echo '</pre>';*/
 
         //$aResult = $this->_curlWrap('/search.json?query='.urlencode('type:ticket status<solved "jobarthel@gmail.com"'), null, 'GET');
         //echo '/search.json?query='.$sQueryParam;
