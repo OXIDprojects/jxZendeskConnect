@@ -69,7 +69,6 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
             if ($oOrder->load($soxId)) {
                 $oUser = $oOrder->getOrderUser();
                 $sUserMail = $oUser->oxuser__oxusername->value;
-                //$sCustomerEMail = $oOrder->oxorder__oxbillemail->value;
             } else {
                 $oUser = oxNew("oxuser");
                 if ($oUser->load($soxId)) {
@@ -79,19 +78,9 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         }
         
         $sQueryParam = urlencode( 'type:ticket status<solved "' . $sUserMail . '"' );
-        //--echo '<pre>'.$sUrl.'</pre>';
-
-        //$aResult = $this->_curlWrap('/search.json?query='.urlencode('type:ticket status<solved "jobarthel@gmail.com"'), null, 'GET');
-        //echo '/search.json?query='.$sQueryParam;
         $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
         
-        /*echo '<pre>';
-        print_r($aResult);
-        echo '</pre>';/**/
         $iIssueCount = $aResult['count'];
-        /*echo '<pre>';
-        print_r($aIssues);
-        echo '</pre>';/**/
         
         $aTickets = $this->_jxZendeskAddUserDetails( $aResult['results'] );
         
@@ -136,10 +125,6 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
 
         $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
         
-        /*echo '<pre>';
-        print_r($aResult);
-        echo '</pre>';/**/
-        
         $iIssueCount = $aResult['count'];
         
         if ($aResult['count'] == 1) {
@@ -162,9 +147,6 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
         $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
 
-        /*echo '<pre>';
-        print_r($aTickets);
-        echo '</pre><hr>';/**/
         $aUserIds = array();
         foreach ($aTickets as $key => $aTicket) {
             //echo $aTicket['requester_id'].'<br>';
@@ -174,11 +156,9 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         }
         
         $sQueryParam = implode( ',', $aUserIds );
-        //echo '<hr>/users/show_many.json?ids='.$sQueryParam.'<br>';
 
         $aResult = $this->_curlWrap( '/users/show_many.json?ids='.$sQueryParam, null, 'GET' );
         
-        //$aResult = $this->_addUserDetails( $aResult );
         $aUsers = $aResult['users'];
         
         foreach ($aTickets as $key => $aTicket) {
@@ -190,73 +170,7 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
             }
         }
         
-        /*echo '<pre>';
-        print_r($aTickets);
-        echo '</pre>';/**/
-        
         return $aTickets;
-    }
-    
-    
-    private function _jxZendeskSearchIssues2() 
-    {
-        $myConfig = oxRegistry::getConfig();
-        
-        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/search';
-        $sProject = $myConfig->getConfigParam('sJxZendeskConnectProject');
-        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
-        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
-        $sFieldCustomerNumber = 'cf[' . $myConfig->getConfigParam('sJxZendeskConnectCustomerNumber') . ']';
-        $sFieldCustomerEMail = 'cf[' . $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail') . ']';
-
-        $sCustomerNumber = oxRegistry::getConfig()->getRequestParameter( 'jxcustomerno' );
-
-        $aData = array(
-                    'jql' => 'project = ' . $sProject . ' AND status != Resolved AND status != Done',
-                    'maxResults' => '100'
-            );        
-
-        $ch = curl_init();
-  
-        $aHeaders = array(
-            'Accept: application/json',
-            'Content-Type: application/json'
-            );        
-
-        /*echo '<pre>';
-        print_r(json_decode(json_encode($aData),JSON_PRETTY_PRINT));
-        echo '</pre>';/**/
-  
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeaders);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($aData));
-        curl_setopt($ch, CURLOPT_URL, $sUrl);
-        curl_setopt($ch, CURLOPT_USERPWD, "$sUsername:$sPassword" );
-
-        $result = curl_exec($ch);
-        $ch_error = curl_error($ch);
-
-        if ($ch_error) {
-            echo "cURL Error: $ch_error";
-        } else {
-            //echo $result;
-            $aResult = json_decode($result,true);
-            $iIssueCount = $aResult['total'];
-            $aIssues = $aResult['issues'];
-            /*echo '<pre>';
-            print_r($aIssues);
-            echo '</pre>';/**/
-            
-            $this->_aViewData["sIssueUrl"] = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/browse/';
-            $this->_aViewData["iIssueCount"] = $iIssueCount;
-            $this->_aViewData["aIssues"] = $aIssues;
-        }
-
-        curl_close($ch);
-        
     }
     
     
@@ -272,7 +186,6 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
         curl_setopt($ch, CURLOPT_URL, $sUrl.$url);
-        //--echo  $sUrl.$url;
         curl_setopt($ch, CURLOPT_USERPWD, $sUsername."/token:".$sToken);
         switch($action){
             case "POST":
@@ -298,17 +211,15 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        /*print_r($ch);*/
+
         $output = curl_exec($ch);
         if ($ch_error) {
             echo "cURL Error: $ch_error";
         }
-        /*var_dump($output);*/
+
         curl_close($ch);
         $decoded = json_decode($output, true);
-        /*echo '<pre>';
-        print_r($decoded);
-        echo '</pre>';*/
+
         return $decoded;
     }    
     

@@ -1,5 +1,5 @@
 /* 
-    Created on : 02.03.2016, 21:17:59
+    Created on : 12.03.2016, 21:17:59
     Author     : Joachim Barthel
 */
 
@@ -24,4 +24,7 @@
     text-align: center;
     display: inline-block;
     border-radius: 2px;
+}
+.zendesk-disabled-text {
+    color: darkgray;    
 }
