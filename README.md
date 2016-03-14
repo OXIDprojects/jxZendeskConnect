@@ -28,7 +28,7 @@ The tickets created by the module _jxZendeskConnect_ have to have attributes whi
 ![Full Log Report](https://github.com/job963/jxZendeskConnect/raw/master/docs/img/user-main-de.png)
 
 #### Issues of a User ####
-![Full Log Report](https://github.com/job963/jxZendeskConnect/raw/master/docs/img/user-jiraissues-de.png)
+![Full Log Report](https://github.com/job963/jxZendeskConnect/raw/master/docs/img/user-zendesktickets-de.png)
 
 #### Issue Info for each Order/User ####
 ![Full Log Report](https://github.com/job963/jxZendeskConnect/raw/master/docs/img/order-main-de.png)
