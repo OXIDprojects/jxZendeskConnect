@@ -86,6 +86,18 @@ $aModule = array(
                                 'value' => ''
                                 ),*/
                         array(
+                                'group' => 'JXZENDESKCONNECT_AGENTS', 
+                                'name'  => 'sJxZendeskConnectAgentName', 
+                                'type'  => 'str', 
+                                'value' => ''
+                                ),
+                        array(
+                                'group' => 'JXZENDESKCONNECT_AGENTS', 
+                                'name'  => 'sJxZendeskConnectAgentEMail', 
+                                'type'  => 'str', 
+                                'value' => ''
+                                ),
+                        array(
                                 'group' => 'JXZENDESKCONNECT_FIELDS', 
                                 'name'  => 'sJxZendeskConnectCustomerEMail', 
                                 'type'  => 'str', 

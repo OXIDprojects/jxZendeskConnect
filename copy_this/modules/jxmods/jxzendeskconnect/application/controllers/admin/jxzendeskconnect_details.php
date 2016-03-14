@@ -221,6 +221,8 @@ class jxzendeskconnect_details extends oxAdminDetails {
         $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
         $sFieldCustomerNumber = 'customfield_' . $myConfig->getConfigParam('sJxZendeskConnectCustomerNumber');
         $sFieldCustomerEMail = 'customfield_' . $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail');*/
+        $sAgentName = $myConfig->getConfigParam('sJxZendeskConnectAgentName');
+        $sAgentEMail = $myConfig->getConfigParam('sJxZendeskConnectAgentEMail');
         $sCustomFieldEMail = $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail');
         $sCustomFieldOrderNo = $myConfig->getConfigParam('sJxZendeskConnectOrderNumber');
 
@@ -258,8 +260,8 @@ class jxzendeskconnect_details extends oxAdminDetails {
             $aPostData = array(
                             'ticket' => array(
                                             'requester' => array(
-                                                            'name' => 'Kathrin Barthel',
-                                                            'email' => 'support-admin@jaspona.de'
+                                                            'name' => $sAgentName,
+                                                            'email' => $sAgentEMail
                                                             ),
                                             'subject' => $sTicketSubject,
                                             'description' => $sTicketDescription,
@@ -282,8 +284,8 @@ class jxzendeskconnect_details extends oxAdminDetails {
             $aPostData = array(
                             'ticket' => array(
                                             'requester' => array(
-                                                            'name' => 'Kathrin Barthel',
-                                                            'email' => 'support-admin@jaspona.de'
+                                                            'name' => $sAgentName,
+                                                            'email' => $sAgentEMail
                                                             ),
                                             'subject' => $sTicketSubject,
                                             'description' => $sTicketDescription,
