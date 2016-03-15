@@ -350,8 +350,16 @@ class jxzendeskconnect_details extends oxAdminDetails {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         $output = curl_exec($ch);
-        /*$aInfo = curl_getinfo($ch);
-        echo '<pre>';
+        $aInfo = curl_getinfo($ch);
+        if (($aInfo['http_code'] < '200') or ($aInfo['http_code'] > '299')) {
+            echo $aInfo['url']."\t";
+            echo $aInfo['http_code']."\t";
+            echo $aInfo['total_time']."\n";
+            echo '<pre>';
+            print_r(json_decode($output, true));
+            echo '</pre>';
+        }
+        /*echo '<pre>';
         echo $aInfo['url']."\t";
         echo $aInfo['http_code']."\t";
         echo $aInfo['total_time']."\n";

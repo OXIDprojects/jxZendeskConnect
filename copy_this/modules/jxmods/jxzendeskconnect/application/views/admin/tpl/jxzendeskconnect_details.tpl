@@ -30,6 +30,16 @@
             document.getElementById('duedatelabel').className = "zendesk-disabled-text";
         }
     }
+    
+    function activateSubmit()
+    {
+        if ( (document.getElementById('summaryfield').value == "") || (document.getElementById('descriptionfield').value == "") ) {
+            document.getElementById('submitbutton').disabled = true;
+        }
+        else {
+            document.getElementById('submitbutton').disabled = false;
+        }
+    }
 </script>
 
 <form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
@@ -102,7 +112,7 @@
                 </tr>
                 <tr>
                     <td>[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td><td>
-                        <input type="text" name="jxzendesk_summary" size="50" />
+                        <input type="text" name="jxzendesk_summary" id="summaryfield" size="50" onkeyup="activateSubmit();" />
                         <select name="jxzendesk_issuetype" id="tickettype" width="20" onchange="selectTicketType();">
                             <option value="question" selected="selected">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_QUESTION" }]</option>
                             <option value="incident">[{ oxmultilang ident="JXZENDESK_TICKETTYPE_INCIDENT" }]</option>
@@ -118,14 +128,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top">[{ oxmultilang ident="JXZENDESK_DESCRIPTION" }]</td><td><textarea cols="80" rows="3" name="jxzendesk_description"></textarea></td>
+                    <td valign="top">[{ oxmultilang ident="JXZENDESK_DESCRIPTION" }]</td>
+                    <td><textarea cols="80" rows="3" name="jxzendesk_description" id="descriptionfield" onkeyup="activateSubmit();"></textarea></td>
                 </tr>
                 <tr>
-                    <td><label id="duedatelabel" class="zendesk-disabled-text">[{ oxmultilang ident="JXZENDESK_DUEDATE" }]</label></td><td><input type="text" name="jxzendesk_duedate" id="duedatefield" size="10" disabled /></td>
+                    <td><label id="duedatelabel" class="zendesk-disabled-text">[{ oxmultilang ident="JXZENDESK_DUEDATE" }]</label></td>
+                    <td><input type="text" name="jxzendesk_duedate" id="duedatefield" size="10" disabled /></td>
                 </tr>
                 </tr>
                 <tr>
-                    <td></td><td><input type="submit" /></td>
+                    <td></td><td><input type="submit" id="submitbutton" disabled /></td>
                 </tr>
             </table>
         </form>
