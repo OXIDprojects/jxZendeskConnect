@@ -33,17 +33,6 @@ class jxzendeskconnect_issuecount extends oxAdminDetails {
     {
         parent::render();
 
-        $myConfig = oxRegistry::getConfig();
-        
-        if ($myConfig->getBaseShopId() == 'oxbaseshop') {
-            // CE or PE shop
-            $sWhereShopId = "";
-        } else {
-            // EE shop
-            $sWhereShopId = "AND l.oxshopid = {$myConfig->getBaseShopId()} ";
-        }
-        $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
-
         $this->_jxZendeskSearchIssues();
 
         return $this->_sThisTemplate;
@@ -54,52 +43,12 @@ class jxzendeskconnect_issuecount extends oxAdminDetails {
     {
         $myConfig = oxRegistry::getConfig();
         
-        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/api/v2/search.json?query=';
-        $sProject = $myConfig->getConfigParam('sJxZendeskConnectProject');
-        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
-        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
-        $sToken = $myConfig->getConfigParam('sJxZendeskConnectToken');
-        //$sFieldCustomerNumber = 'cf[' . $myConfig->getConfigParam('sJxZendeskConnectCustomerNumber') . ']';
-        //$sFieldCustomerEMail = 'cf[' . $myConfig->getConfigParam('sJxZendeskConnectCustomerEMail') . ']';
-
         $sUserMail = $myConfig->getRequestParameter( 'jxusername' );
-        //echo $sUserMail."#";
-
-        /*$aData = array(
-                    'jql' => $sFieldCustomerNumber . ' ~ ' . $sCustomerNumber . ' AND (status != Resolved AND status != Done)',
-                    'maxResults' => '1'
-            );*/
-        
-        /*$soxId = $this->getEditObjectId();
-        if ($soxId != "-1" && isset($soxId)) {
-            // load object
-            echo "soxid=".$soxId;
-            $oOrder = oxNew("oxorder");
-            if ($oOrder->load($soxId)) {
-                $oUser = $oOrder->getOrderUser();
-                $sCustomerNumber = $oUser->oxuser__oxcustnr->value;
-                $sCustomerEMail = $oOrder->oxorder__oxbillemail->value;
-                echo 'u='.$sCustomerEMail;
-            } else {
-                $oUser = oxNew("oxuser");
-                if ($oUser->load($soxId)) {
-                    $sCustomerNumber = $oUser->oxuser__oxcustnr->value;
-                    $sCustomerEMail = $oUser->oxuser__oxusername->value;
-                    echo 'o='.$sCustomerEMail;
-                }
-            }
-        }*/
         
         $sQueryParam = urlencode( 'type:ticket status<solved "' . $sUserMail . '"' );
-        //--echo '<pre>'.$sUrl.'</pre>';
 
-        //$aResult = $this->_curlWrap('/search.json?query='.urlencode('type:ticket status<solved "jobarthel@gmail.com"'), null, 'GET');
-        //echo '/search.json?query='.$sQueryParam;
         $aResult = $this->_curlWrap('/search.json?query='.$sQueryParam, null, 'GET');
         
-        /*echo '<pre>';
-        print_r($aResult);
-        echo '</pre>';*/
         $iIssueCount = $aResult['count'];
 
         $this->_aViewData["iIssueCount"] = $iIssueCount;
@@ -111,14 +60,13 @@ class jxzendeskconnect_issuecount extends oxAdminDetails {
         $myConfig = oxRegistry::getConfig();
         $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/api/v2';
         $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
-        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
+        //$sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
         $sToken = $myConfig->getConfigParam('sJxZendeskConnectToken');
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
         curl_setopt($ch, CURLOPT_URL, $sUrl.$url);
-        //--echo  $sUrl.$url;
         curl_setopt($ch, CURLOPT_USERPWD, $sUsername."/token:".$sToken);
         switch($action){
             case "POST":
@@ -144,17 +92,12 @@ class jxzendeskconnect_issuecount extends oxAdminDetails {
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        /*print_r($ch);*/
         $output = curl_exec($ch);
         if ($ch_error) {
             echo "cURL Error: $ch_error";
         }
-        /*var_dump($output);*/
         curl_close($ch);
         $decoded = json_decode($output, true);
-        /*echo '<pre>';
-        print_r($decoded);
-        echo '</pre>';*/
         return $decoded;
     }    
 }

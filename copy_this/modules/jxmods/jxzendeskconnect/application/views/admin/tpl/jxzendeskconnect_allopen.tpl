@@ -25,10 +25,10 @@
 </form>
 
 
-<div style="height:92%;" >
+<h2>[{ oxmultilang ident="jxzendeskconnect_menu" }]</h2>
 
     [{*$iIssueCount*}]
-    <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:95%; overflow-y:scroll;">
+    <div id="liste" style="border:0px solid gray; padding:4px; width:99%; margin-top:8px; /*height:95%; overflow-y:scroll;*/">
             <table cellspacing="0" cellpadding="0" border="0" width="99%">
                 <tr>
                     <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_TICKETMODE" }]</td>
@@ -44,7 +44,7 @@
                     [{ cycle values="listitem,listitem2" assign="listclass" }]
                     <tr>
                         <td class="[{ $listclass }]" style="height: 20px;">
-                            [{if $sUserID == $aIssue.requester_id}]
+                            [{if $sUserID != $aIssue.requester_id}]
                                 <div class="zendesk-icon" style="background-color:darkgray;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_CUSTOMER" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_CUSTOMER" }]
                             [{else}]
                                 <div class="zendesk-icon" style="background-color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_INTERNAL" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]
@@ -73,12 +73,6 @@
 
     </div>
 
-    [{*<div style="float:right;/*position:relative;bottom:-40px;*/padding-right:10px;">
-    <br />
-            <a href="https://github.com/job963/jxAdminLog" target="_blank"><span style="color:gray;">jxAdminLog</span></a>
-    </div>*}]
-
-</div>
 
 [{*include file="bottomnaviitem.tpl"*}]
 [{include file="bottomitem.tpl"}]

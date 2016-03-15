@@ -27,27 +27,13 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
     protected $_sThisTemplate = "jxzendeskconnect_allopen.tpl";
 
     /**
-     * Displays the latest log entries of selected object
+     * Displays the open tickets of all customers
      */
     public function render() 
     {
         parent::render();
 
-        $myConfig = oxRegistry::getConfig();
-        
-        if ($myConfig->getBaseShopId() == 'oxbaseshop') {
-            // CE or PE shop
-            $sWhereShopId = "";
-        } else {
-            // EE shop
-            $sWhereShopId = "AND l.oxshopid = {$myConfig->getBaseShopId()} ";
-        }
-        $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
-
-        $sObjectId = $this->getEditObjectId();
-        
         $this->_jxZendeskSearchIssues();
-		
 
         return $this->_sThisTemplate;
     }
@@ -62,22 +48,7 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         $myConfig = oxRegistry::getConfig();
         $sServerUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl');
 
-        $soxId = $this->getEditObjectId();
-        if ($soxId != "-1" && isset($soxId)) {
-            // load object
-            $oOrder = oxNew("oxorder");
-            if ($oOrder->load($soxId)) {
-                $oUser = $oOrder->getOrderUser();
-                $sUserMail = $oUser->oxuser__oxusername->value;
-            } else {
-                $oUser = oxNew("oxuser");
-                if ($oUser->load($soxId)) {
-                    $sUserMail = $oUser->oxuser__oxusername->value;
-                }
-            }
-        }
-        
-        $sQueryParam = urlencode( 'type:ticket status<solved "' . $sUserMail . '"' );
+        $sQueryParam = urlencode( 'type:ticket status<solved' );
         $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
         
         $iIssueCount = $aResult['count'];
@@ -101,27 +72,9 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
     {
         $myConfig = oxRegistry::getConfig();
         
-        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/search';
-        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
-        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
-
-        $soxId = $this->getEditObjectId();
-        if ($soxId != "-1" && isset($soxId)) {
-            // load object
-            $oOrder = oxNew("oxorder");
-            if ($oOrder->load($soxId)) {
-                $oUser = $oOrder->getOrderUser();
-                $sUserMail = $oUser->oxuser__oxusername->value;
-                //$sCustomerEMail = $oOrder->oxorder__oxbillemail->value;
-            } else {
-                $oUser = oxNew("oxuser");
-                if ($oUser->load($soxId)) {
-                    $sUserMail = $oUser->oxuser__oxusername->value;
-                }
-            }
-        }
+        $sAgentEMail = $myConfig->getConfigParam('sJxZendeskConnectAgentEMail');
         
-        $sQueryParam = urlencode( 'type:user "' . $sUserMail . '"' );
+        $sQueryParam = urlencode( 'type:user "' . $sAgentEMail . '"' );
 
         $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
         
@@ -142,14 +95,9 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
     private function _jxZendeskAddUserDetails( $aTickets ) 
     {
         $myConfig = oxRegistry::getConfig();
-        
-        $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/rest/api/2/search';
-        $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
-        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
 
         $aUserIds = array();
         foreach ($aTickets as $key => $aTicket) {
-            //echo $aTicket['requester_id'].'<br>';
             if (!in_array($aTicket['requester_id'], $aUserIds)) {
                 $aUserIds[] = $aTicket['requester_id']; 
             }
@@ -179,7 +127,7 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         $myConfig = oxRegistry::getConfig();
         $sUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl') . '/api/v2';
         $sUsername = $myConfig->getConfigParam('sJxZendeskConnectUser');
-        $sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
+        //$sPassword = $myConfig->getConfigParam('sJxZendeskConnectPassword');
         $sToken = $myConfig->getConfigParam('sJxZendeskConnectToken');
 
         $ch = curl_init();
