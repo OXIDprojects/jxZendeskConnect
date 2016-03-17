@@ -13,11 +13,13 @@
     background-position: center center;
     background-repeat: no-repeat;
 }
+
 .listitem, .listitem2 {
     padding-left: 4px;
     padding-right: 16px;
     white-space: nowrap;
 }
+
 .zendesk-icon {
     color: white;
     width: 12px;
@@ -25,6 +27,27 @@
     display: inline-block;
     border-radius: 2px;
 }
+
 .zendesk-disabled-text {
     color: darkgray;    
+}
+
+.zendesk-msg-success {
+    font-weight: bold;
+    color: forestgreen;
+    background-color: #eeffee;
+    border: 1px solid darkgreen;
+    padding: 2px;
+    margin-bottom: 6px;
+    border-radius: 3px;
+}
+
+.zendesk-msg-warning {
+    font-weight: bold;
+    color: firebrick;
+    background-color: #ffeeee;
+    border: 1px solid darkred;
+    padding: 2px;
+    margin-bottom: 6px;
+    border-radius: 3px;
 }

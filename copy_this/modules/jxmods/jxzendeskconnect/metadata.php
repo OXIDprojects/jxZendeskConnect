@@ -15,7 +15,7 @@ $aModule = array(
                         'en' => 'Display and Creation of Zendesk Tickets for Shop Customers'
                         ),
     'thumbnail'    => 'jxzendeskconnect.png',
-    'version'      => '0.1',
+    'version'      => '0.1.2',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxZendeskConnect',
     'email'        => 'jobarthel@gmail.com',

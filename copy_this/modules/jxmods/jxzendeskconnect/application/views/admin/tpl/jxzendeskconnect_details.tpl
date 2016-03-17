@@ -45,10 +45,15 @@
 <form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
     [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
-    <input type="hidden" name="cl" value="jx_voucherserie_show">
+    <input type="hidden" name="cl" value="jx_zendeskconnect_details">
 </form>
 
-
+    [{if $iNewTicketId }]
+        <div class="zendesk-msg-success">
+            &nbsp;[{ oxmultilang ident="JXZENDESK_TICKET" }] [{ $iNewTicketId }] "[{ $sNewTicketSubject }]" [{ oxmultilang ident="JXZENDESK_TICKETCREATED" }]
+        </div>
+    [{/if}]
+    
     [{*$iIssueCount*}]
     <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:45%; overflow-y:scroll;">
             <table cellspacing="0" cellpadding="0" border="0" width="99%">

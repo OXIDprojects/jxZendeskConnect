@@ -23,6 +23,9 @@ $aLang = array(
         'JXZENDESK_DUEDATE'                         => 'Due date',
         'JXZENDESK_DESCRIPTION'                     => 'Description',
     
+        'JXZENDESK_TICKET'                          => 'Ticket',
+        'JXZENDESK_TICKETCREATED'                   => 'was created',
+    
         'JXZENDESK_TICKETMODE'                      => 'Mode',
         'JXZENDESK_TICKETMODE_INTERNAL'             => 'Internal',
         'JXZENDESK_TICKETMODE_CUSTOMER'             => 'Customer',

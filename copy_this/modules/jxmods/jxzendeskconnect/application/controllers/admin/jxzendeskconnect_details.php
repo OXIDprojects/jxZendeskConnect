@@ -53,6 +53,7 @@ class jxzendeskconnect_details extends oxAdminDetails {
      */
     private function _jxZendeskSearchIssues() 
     {
+        $myConfig = oxRegistry::getConfig();
 
         $soxId = $this->getEditObjectId();
         if ($soxId != "-1" && isset($soxId)) {
@@ -284,6 +285,11 @@ class jxzendeskconnect_details extends oxAdminDetails {
         $sPostData = json_encode( $aPostData );
 
         $aResult = $this->_curlWrap( '/tickets.json', $sPostData, 'POST' );
+        
+        if ( $aResult['ticket'] ) {
+            $this->_aViewData["iNewTicketId"] = $aResult['ticket']['id'];
+            $this->_aViewData["sNewTicketSubject"] = $aResult['ticket']['subject'];
+        }
         
     }
     
