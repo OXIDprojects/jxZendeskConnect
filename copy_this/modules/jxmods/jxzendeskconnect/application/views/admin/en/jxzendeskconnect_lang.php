@@ -15,6 +15,7 @@ $aLang = array(
     
         'JXZENDESK_STATUSICON'                      => 'S',
         'JXZENDESK_KEY'                             => 'Key',
+        'JXZENDESK_TIMEPAST'                        => 'Past time',
         'JXZENDESK_SUMMARY'                         => 'Summary',
         'JXZENDESK_PRIORITY'                        => 'Priority',
         'JXZENDESK_STATUS'                          => 'Status',

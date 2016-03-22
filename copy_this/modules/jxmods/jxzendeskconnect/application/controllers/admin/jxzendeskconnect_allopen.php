@@ -49,16 +49,17 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         $sServerUrl = $myConfig->getConfigParam('sJxZendeskConnectServerUrl');
 
         $sQueryParam = urlencode( 'type:ticket status<solved' );
-        $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam, null, 'GET' );
+        $aResult = $this->_curlWrap( '/search.json?query='.$sQueryParam.'&sort_by=updated_at&sort_order=asc', null, 'GET' );
         
         $iIssueCount = $aResult['count'];
         
         $aTickets = $this->_jxZendeskAddUserDetails( $aResult['results'] );
+        $aTickets = $this->_jxZendeskAddTimeDetails( $aTickets );
         
-        $aUser = $this->_jxZendeskSearchUser();
+        $aAgent = $this->_jxZendeskSearchAgent();
         
         $this->_aViewData["sServerUrl"] = $myConfig->getConfigParam('sJxZendeskConnectServerUrl');
-        $this->_aViewData["sUserID"] = $aUser['id'];
+        $this->_aViewData["sAgentID"] = $aAgent['id'];
         $this->_aViewData["iIssueCount"] = $iIssueCount;
         $this->_aViewData["aIssues"] = $aTickets;
 
@@ -68,7 +69,7 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
     /*
      * 
      */
-    private function _jxZendeskSearchUser() 
+    private function _jxZendeskSearchAgent() 
     {
         $myConfig = oxRegistry::getConfig();
         
@@ -119,6 +120,47 @@ class jxzendeskconnect_allopen extends oxAdminDetails {
         }
         
         return $aTickets;
+    }
+    
+    
+    /*
+     * 
+     */
+    private function _jxZendeskAddTimeDetails( $aTickets ) 
+    {
+        $myConfig = oxRegistry::getConfig();
+
+        foreach ($aTickets as $key => $aTicket) {
+            $tUpdated = strtotime( $aTicket['updated_at'] );
+            $tNow = strtotime( date('Y-m-d H:i:s') );
+            $tDiff = $tNow - $tUpdated;
+            $aTickets[$key]['time_past'] = $this->_transformTimePeriod($tDiff);
+        }
+        
+        return $aTickets;
+    }
+
+
+    /*
+     * 
+     */
+    function _transformTimePeriod($timePeriod)
+    {
+        $timeString = DATE( "z,G,i,s", $timePeriod );
+        $aTimes = explode( ',', $timeString );
+        foreach ($aTimes as $key => $value) {
+            $aTimes[$key] = (int)$value;
+        }
+        $timeDiff = '';
+        if ($aTimes[0] != 0)
+            $timeDiff .= $aTimes[0] . 'd ';
+        if ($aTimes[1] != 0)
+            $timeDiff .= $aTimes[1] . 'h ';
+        if ($aTimes[2] != 0)
+            $timeDiff .= $aTimes[2] . 'm ';
+        /*if ($aTimes[3] != 0)
+            $timeDiff .= $aTimes[3] . 's ';*/
+        return $timeDiff;
     }
     
     

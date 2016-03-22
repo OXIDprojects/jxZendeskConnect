@@ -33,6 +33,7 @@
                 <tr>
                     <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_TICKETMODE" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_TICKETTYPE" }]</td>
+                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_TIMEPAST" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_PRIORITY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_STATUS" }]</td>
@@ -44,13 +45,14 @@
                     [{ cycle values="listitem,listitem2" assign="listclass" }]
                     <tr>
                         <td class="[{ $listclass }]" style="height: 20px;">
-                            [{if $sUserID != $aIssue.requester_id}]
+                            [{if $sAgentID != $aIssue.requester_id}]
                                 <div class="zendesk-icon" style="background-color:darkgray;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_CUSTOMER" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_CUSTOMER" }]
                             [{else}]
                                 <div class="zendesk-icon" style="background-color:darkgoldenrod;">[{ oxmultilang ident="JXZENDESK_TICKETMODE_SHORT_INTERNAL" }]</div> [{ oxmultilang ident="JXZENDESK_TICKETMODE_INTERNAL" }]
                             [{/if}]
                         </td>
                         <td class="[{ $listclass }]">[{if $aIssue.type != ""}][{ oxmultilang ident="JXZENDESK_TICKETTYPE_"|cat:$aIssue.type|upper }][{/if}]</td>
+                        <td class="[{ $listclass }]" align="right">[{ $aIssue.time_past }]&nbsp;</td>
                         <td class="[{ $listclass }]" title="[{$aIssue.description}]"><a href="[{$sServerUrl}]/agent/tickets/[{$aIssue.id}]" title="[{$aIssue.description}]" target="_blank">[{$aIssue.subject}]</a></td>
                         <td class="[{ $listclass }]">[{if $aIssue.priority != ""}][{ oxmultilang ident="JXZENDESK_PRIORITY_"|cat:$aIssue.priority|upper }][{/if}]</td>
                         <td class="[{ $listclass }]">
