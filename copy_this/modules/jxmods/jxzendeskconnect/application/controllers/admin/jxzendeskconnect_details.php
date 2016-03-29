@@ -300,8 +300,6 @@ class jxzendeskconnect_details extends oxAdminDetails {
      */
     private function _jxZendeskAddTimeDetails( $aTickets ) 
     {
-        $myConfig = oxRegistry::getConfig();
-
         foreach ($aTickets as $key => $aTicket) {
             $tUpdated = strtotime( $aTicket['updated_at'] );
             $tNow = strtotime( date('Y-m-d H:i:s') );
@@ -323,15 +321,39 @@ class jxzendeskconnect_details extends oxAdminDetails {
         foreach ($aTimes as $key => $value) {
             $aTimes[$key] = (int)$value;
         }
+        
+        $myConfig = oxRegistry::getConfig();
+        $sTimeFormat = $myConfig->getConfigParam('sJxZendeskConnectTimeLast');    
+        
         $timeDiff = '';
-        if ($aTimes[0] != 0)
-            $timeDiff .= $aTimes[0] . 'd ';
-        if ($aTimes[1] != 0)
-            $timeDiff .= $aTimes[1] . 'h ';
-        if ($aTimes[2] != 0)
-            $timeDiff .= $aTimes[2] . 'm ';
-        /*if ($aTimes[3] != 0)
-            $timeDiff .= $aTimes[3] . 's ';*/
+        switch ($sTimeFormat) {
+            case 'dhm':
+                if ( $aTimes[0] != 0 )
+                    $timeDiff = sprintf('%1$dd &nbsp%2$02dh &nbsp%3$02dm', $aTimes[0], $aTimes[1], $aTimes[2]);
+                elseif ( ($aTimes[0] == 0) and ($aTimes[1] != 0) )
+                    $timeDiff = sprintf('%2$dh &nbsp;%3$02dm', $aTimes[0], $aTimes[1], $aTimes[2]);
+                else
+                    $timeDiff = sprintf('%3$dm', $aTimes[0], $aTimes[1], $aTimes[2]);
+                
+                break;
+
+            case 'dhhmm':
+                if ( $aTimes[0] != 0 )
+                    $timeDiff = sprintf('%1$dd &nbsp;%2$02d:%3$02d', $aTimes[0], $aTimes[1], $aTimes[2]);
+                elseif ( ($aTimes[0] == 0) and ($aTimes[1] != 0) )
+                    $timeDiff = sprintf('%2$d:%3$02d', $aTimes[0], $aTimes[1], $aTimes[2]);
+                else
+                    $timeDiff = sprintf('%2$2d:%3$02d', $aTimes[0], $aTimes[1], $aTimes[2]);
+                break;
+
+            case 'hmm':
+                $timeDiff = sprintf('%1$d:%2$02d', ($aTimes[0]*24+$aTimes[1]), $aTimes[2]);
+                break;
+
+            default:
+                break;
+        }
+        
         return $timeDiff;
     }
     

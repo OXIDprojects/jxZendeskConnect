@@ -15,9 +15,6 @@
             <SUBMENU id="mxusers" cl="admin_user" list="user_list">
                 <TAB id="tbcluser_jxzendeskconnect" cl="jxzendeskconnect_details" />
             </SUBMENU>
-            <!-- SUBMENU id="mxugroups" cl="usergroup" list="usergroup_list">
-                <TAB id="tbclusergroup_history" cl="jxzendeskconnect_details" />
-            </SUBMENU -->
             <SUBMENU id="jxzendeskconnect_menu" cl="jxzendeskconnect_allopen">
             </SUBMENU>
         </MAINMENU>

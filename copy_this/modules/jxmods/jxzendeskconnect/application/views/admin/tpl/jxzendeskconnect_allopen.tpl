@@ -34,8 +34,8 @@
                     <td class="listheader">&nbsp;[{ oxmultilang ident="JXZENDESK_TICKETMODE" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_TICKETTYPE" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_TIMEPAST" }]</td>
-                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_PRIORITY" }]</td>
+                    <td class="listheader">[{ oxmultilang ident="JXZENDESK_SUMMARY" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_STATUS" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_CREATED" }]</td>
                     <td class="listheader">[{ oxmultilang ident="JXZENDESK_CREATOR" }]</td>
@@ -53,8 +53,8 @@
                         </td>
                         <td class="[{ $listclass }]">[{if $aIssue.type != ""}][{ oxmultilang ident="JXZENDESK_TICKETTYPE_"|cat:$aIssue.type|upper }][{/if}]</td>
                         <td class="[{ $listclass }]" align="right">[{ $aIssue.time_past }]&nbsp;</td>
-                        <td class="[{ $listclass }]" title="[{$aIssue.description}]"><a href="[{$sServerUrl}]/agent/tickets/[{$aIssue.id}]" title="[{$aIssue.description}]" target="_blank">[{$aIssue.subject}]</a></td>
                         <td class="[{ $listclass }]">[{if $aIssue.priority != ""}][{ oxmultilang ident="JXZENDESK_PRIORITY_"|cat:$aIssue.priority|upper }][{/if}]</td>
+                        <td class="[{ $listclass }]" title="[{$aIssue.description}]"><a href="[{$sServerUrl}]/agent/tickets/[{$aIssue.id}]" title="[{$aIssue.description}]" target="_blank">[{$aIssue.subject}]</a></td>
                         <td class="[{ $listclass }]">
                             [{if $aIssue.status == "open"}]
                                 <div class="zendesk-icon" style="background-color:crimson;">[{ oxmultilang ident="JXZENDESK_STATUS_SHORT_OPEN" }]</div>
@@ -76,6 +76,6 @@
     </div>
 
 
-[{*include file="bottomnaviitem.tpl"*}]
+[{* include file="bottomnaviitem.tpl" *}]
 [{include file="bottomitem.tpl"}]
 

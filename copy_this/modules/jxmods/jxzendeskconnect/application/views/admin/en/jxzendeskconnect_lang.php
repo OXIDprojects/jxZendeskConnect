@@ -68,5 +68,10 @@ $aLang = array(
         'SHOP_MODULE_sJxZendeskConnectCustomerNumber' => 'Field ID for Customer Number',
         'SHOP_MODULE_sJxZendeskConnectOrderNumber'  => 'Field ID for Order Number',
         'SHOP_MODULE_sJxZendeskConnectCustomerEMail' => 'Field ID for Customer E-Mail',
+        'SHOP_MODULE_GROUP_JXZENDESKCONNECT_DISPLAY' => 'Display',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast'     => 'Time display format',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast_dhm' => '0d &nbsp;0h &nbsp;0m',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast_dhhmm'   => '0d &nbsp;hh:mm',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast_hmm' => 'hh:mm',
 
     );

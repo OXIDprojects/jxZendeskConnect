@@ -15,7 +15,7 @@ $aModule = array(
                         'en' => 'Display and Creation of Zendesk Tickets for Shop Customers'
                         ),
     'thumbnail'    => 'jxzendeskconnect.png',
-    'version'      => '0.1.2',
+    'version'      => '0.1.3',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxZendeskConnect',
     'email'        => 'jobarthel@gmail.com',
@@ -73,18 +73,6 @@ $aModule = array(
                                 'type'  => 'str', 
                                 'value' => ''
                                 ),
-                        /*array(
-                                'group' => 'JXZENDESKCONNECT_DEFAULTS', 
-                                'name'  => 'sJxZendeskConnectProject', 
-                                'type'  => 'str', 
-                                'value' => ''
-                                ),
-                        array(
-                                'group' => 'JXZENDESKCONNECT_DEFAULTS', 
-                                'name'  => 'sJxZendeskConnectAssignee', 
-                                'type'  => 'str', 
-                                'value' => ''
-                                ),*/
                         array(
                                 'group' => 'JXZENDESKCONNECT_AGENTS', 
                                 'name'  => 'sJxZendeskConnectAgentName', 
@@ -108,6 +96,14 @@ $aModule = array(
                                 'name'  => 'sJxZendeskConnectOrderNumber', 
                                 'type'  => 'str', 
                                 'value' => ''
+                                ),
+                        array(
+                                'group' => 'JXZENDESKCONNECT_DISPLAY', 
+                                'name'  => 'sJxZendeskConnectTimeLast', 
+                                'type'  => 'select', 
+                                'value' => 'dhm',
+                                'constrains' => 'dhm|dhhmm|hmm', 
+                                'position' => 0 
                                 )
                         )
 );

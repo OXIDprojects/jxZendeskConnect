@@ -4,7 +4,7 @@ $sLangName  = "Deutsch";
 $iLangNr    = 0;
 
 $aLang = array(
-	'charset'                               => 'ISO-8859-15',
+	'charset'                                  => 'ISO-8859-15',
 	'tbcluser_jxzendeskconnect'                => 'Zendesk',
 	'tbclorder_jxzendeskconnect'               => 'Zendesk',
     
@@ -66,7 +66,12 @@ $aLang = array(
         'SHOP_MODULE_sJxZendeskConnectAgentEMail'   => 'E-Mail',
         'SHOP_MODULE_GROUP_JXZENDESKCONNECT_FIELDS' => 'Benutzerdefinierte Zendesk-Felder',
         'SHOP_MODULE_sJxZendeskConnectCustomerNumber' => 'Feld ID f&uuml;r Kundennummer',
-        'SHOP_MODULE_sJxZendeskConnectOrderNumber' => 'Feld ID f&uuml;r Bestellnummer',
+        'SHOP_MODULE_sJxZendeskConnectOrderNumber'  => 'Feld ID f&uuml;r Bestellnummer',
         'SHOP_MODULE_sJxZendeskConnectCustomerEMail' => 'Feld ID f&uuml;r Kunden E-Mail',
+        'SHOP_MODULE_GROUP_JXZENDESKCONNECT_DISPLAY' => 'Anzeige',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast'     => 'Zeitdarstellung',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast_dhm' => '0d &nbsp;0h &nbsp;0m',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast_dhhmm'   => '0d &nbsp;hh:mm',
+        'SHOP_MODULE_sJxZendeskConnectTimeLast_hmm' => 'hh:mm',
     
 );
